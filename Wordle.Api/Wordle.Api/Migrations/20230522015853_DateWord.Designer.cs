@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wordle.Api.Data;
 
@@ -11,9 +12,11 @@ using Wordle.Api.Data;
 namespace Wordle.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230522015853_DateWord")]
+    partial class DateWord
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,46 +78,6 @@ namespace Wordle.Api.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("Wordle.Api.Data.Plays", b =>
-                {
-                    b.Property<int>("PlaysId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlaysId"));
-
-                    b.Property<int>("Attempts")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DateWordId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TimeInSeconds")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("WasGameWon")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("WordId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PlaysId");
-
-                    b.HasIndex("DateWordId");
-
-                    b.HasIndex("PlayerId");
-
-                    b.HasIndex("WordId");
-
-                    b.ToTable("Plays");
-                });
-
             modelBuilder.Entity("Wordle.Api.Data.Word", b =>
                 {
                     b.Property<int>("WordId")
@@ -147,36 +110,6 @@ namespace Wordle.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Word");
-                });
-
-            modelBuilder.Entity("Wordle.Api.Data.Plays", b =>
-                {
-                    b.HasOne("Wordle.Api.Data.DateWord", "DateWord")
-                        .WithMany("Plays")
-                        .HasForeignKey("DateWordId");
-
-                    b.HasOne("Wordle.Api.Data.Player", "Player")
-                        .WithMany()
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Wordle.Api.Data.Word", "Word")
-                        .WithMany()
-                        .HasForeignKey("WordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DateWord");
-
-                    b.Navigation("Player");
-
-                    b.Navigation("Word");
-                });
-
-            modelBuilder.Entity("Wordle.Api.Data.DateWord", b =>
-                {
-                    b.Navigation("Plays");
                 });
 
             modelBuilder.Entity("Wordle.Api.Data.Word", b =>

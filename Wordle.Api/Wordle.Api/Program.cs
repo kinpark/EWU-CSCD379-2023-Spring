@@ -1,4 +1,8 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel;
 using Wordle.Api.Data;
 using Wordle.Api.Services;
 
@@ -32,6 +36,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 builder.Services.AddScoped<WordService>();
 builder.Services.AddScoped<PlayerService>();
+builder.Services.AddScoped<PlaysService>();
 
 var app = builder.Build();
 
@@ -46,18 +51,30 @@ using (var scope = app.Services.CreateScope())
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool>("UseSwagger", false))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// Add a redirect for the root URL
+var redirectRootUrl = app.Configuration.GetValue<string>("RedirectRootUrl", "");
+if (string.IsNullOrEmpty(redirectRootUrl)) redirectRootUrl = "https://brave-forest-08291851e.3.azurestaticapps.net/";
+var options = new RewriteOptions()
+        .AddRedirect("^$", redirectRootUrl, 302);
+app.UseRewriter(options);
+
 app.UseHttpsRedirection();
 
 app.UseCors(MyAllowAllOrigins);
+
+// Add Google site verification.
+app.MapGet("/google5b827f426094db3f.html", () => "google-site-verification: google5b827f426094db3f.html");
 
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

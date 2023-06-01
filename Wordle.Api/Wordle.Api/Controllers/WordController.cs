@@ -20,7 +20,8 @@ namespace Wordle.Api.Controllers
         [HttpGet]
         public async Task<string> Get()
         {
-            return await _wordService.GetRandomWord();
+            Word word = await _wordService.GetRandomWord();
+            return word.Text;
         }
 
         [HttpGet("GetManyWords")]
@@ -39,6 +40,20 @@ namespace Wordle.Api.Controllers
         public async Task<Word> AddWordFromBody([FromBody] WordDto word)
         {
             return await _wordService.AddWord(word.Text, word.IsCommon);
+        }
+
+        [HttpGet("WordOfTheDay")]
+        public async Task<WordOfTheDayDto> GetWordOfTheDay(double offsetInHours, DateTime? date = null)
+        {
+            return new WordOfTheDayDto(await _wordService.GetWordOfTheDay(TimeSpan.FromHours(offsetInHours), date));
+        }
+
+        [HttpGet("GetDailyWordStatistics")]
+        public async Task<List<WordOfTheDayStatsDto>> GetDailyWordStatistics(string? name = null)
+        {
+            DateTime? date = null;
+            int daysBack = 10;
+            return await _wordService.GetDailyWordStatistics(date, daysBack, name);
         }
     }
 }    

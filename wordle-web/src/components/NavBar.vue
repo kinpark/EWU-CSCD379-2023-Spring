@@ -5,16 +5,20 @@
         ><v-icon>mdi-diamond-stone</v-icon> Wordle Redux</v-toolbar-title
       >
       <v-spacer></v-spacer>
-      <v-toolbar-items class="red--text">
+      <v-toolbar-items v-if="display.mdAndUp">
         <v-btn to="/">Home</v-btn>
         <v-btn to="/wordle">Wordle</v-btn>
         <v-btn to="/leaderboard">Leader Board</v-btn>
         <v-btn to="/about">About</v-btn>
+        <v-btn to="/worldoftheday">Wordle of the Day</v-btn>
+      </v-toolbar-items>
+      <v-toolbar-items>
+        <GameInstruction/>
         <v-app-bar-nav-icon @click="setTheme('default')" icon="mdi-theme-light-dark"> </v-app-bar-nav-icon>
         <v-app-bar-nav-icon @click.stop="setting = true" icon="mdi-cog"></v-app-bar-nav-icon>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       </v-toolbar-items>
-    </v-toolbar>
+    </v-toolbar>  
 
     <v-navigation-drawer location="right" @click.stop="drawer = !drawer" v-model="drawer" temporary>
       <v-list-item >
@@ -27,16 +31,26 @@
           <v-list-item prepend-icon="mdi-star" to="/wordle">
             Wordle
           </v-list-item>
+          <v-list-item prepend-icon="mdi-calendar-today" to="/worldoftheday" >
+            Wordle Of the Day
+          </v-list-item>
           <v-list-item prepend-icon="mdi-star-box" to="/leaderboard">
             Leader Board
           </v-list-item>
+          <v-list-item prepend-icon="mdi-table-clock" to="/lasttenwords">
+            Last 10 Wordle of the day
+          </v-list-item>
+          <v-list-item prepend-icon="mdi-cog" @click.stop="setting = true" @click="drawer = !drawer">
+            Setting
+          </v-list-item>
           <v-list-item prepend-icon="mdi-information" to="/about">
-            About</v-list-item
-          >
+            About 
+          </v-list-item>
         </v-list-item-content>
       </v-list-item>
     </v-navigation-drawer>
   </nav>
+
   <v-dialog v-model="setting" width="auto">
     <v-card>
       <v-list-item>
@@ -64,11 +78,21 @@
       </v-list-item>
     </v-card>
   </v-dialog>
+
 </template>
 
 <script setup lang="ts">
 import { useTheme } from 'vuetify/lib/framework.mjs'
 import { ref } from 'vue'
+import GameInstruction from './GameInstruction.vue'
+import { inject, reactive } from 'vue'
+import { useDisplay } from 'vuetify'
+import { Services } from '@/scripts/services'
+
+const display = inject(Services.Display, () => reactive(useDisplay())) as unknown as ReturnType<
+  typeof useDisplay
+>
+
 
 const theme = useTheme()
 const drawer = ref (false)
@@ -94,4 +118,10 @@ function setTheme(themecolor: string){
       theme.global.name.value = 'light'
     } else theme.global.name.value = 'light'
     }  
+
+
+  
 </script>
+
+
+

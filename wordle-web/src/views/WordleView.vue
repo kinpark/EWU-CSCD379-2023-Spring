@@ -1,5 +1,15 @@
 <template>
-  <h1>Wordle Redux</h1> 
+  <v-overlay :model-value="overlay" class="align-center justify-center" persistent>
+    <v-progress-circular color="primary" indeterminate size="64" />
+  </v-overlay>
+
+  <div class="text-h4 text-center">
+    <span v-if="isWordOfTheDay"
+      > Wordle of the Day
+      </span>
+    <span v-else>Wordle Redux</span>
+  </div>
+
   <v-col class="text-right">
   <h1>Time: {{ min }} : {{ sec }}</h1>
   <setUsername/> 
@@ -14,7 +24,24 @@
 
   <KeyBoard @letterClick="addChar" :guessedLetters="game.guessedLetters" />
   <v-row class="justify-center">
-    <v-btn @click="checkGuess" @keyup.enter="checkGuess" color="primary" > Check </v-btn>
+    <v-btn
+      @click="checkGuess"
+      @keyup.enter="checkGuess"
+      color="primary"
+      :size="display.xs ? 'small' : display.sm ? undefined : 'large'"
+      v-if="game.status == WordleGameStatus.Active"
+    >
+      Check
+    </v-btn>
+    <v-btn
+      @click="startGame"
+      @keyup.enter="checkGuess"
+      color="secondary"
+      :size="display.xs ? 'small' : display.sm ? undefined : 'large'"
+      v-if="game.status !== WordleGameStatus.Active"
+    >
+      New Game
+    </v-btn>
   </v-row>
 
   <!-- <h2>{{ guess }}</h2> -->
@@ -24,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { WordleGame, WordleGameStatus,  } from '@/scripts/wordleGame'
+import { WordleGame, WordleGameStatus } from '@/scripts/wordleGame'
 import { ref, reactive } from 'vue';
 import GameBoard from '../components/GameBoard.vue'
 import KeyBoard from '../components/KeyBoard.vue'
@@ -35,6 +62,16 @@ import clicking_button from '@/assets/clicking_button_sound.mp3'
 import guess_button from '@/assets/guess_button_sound.mp3'
 import Axios from 'axios'
 import setUsername from '@/components/SetUsername.vue'
+import {WordsService} from '@/scripts/wordsService'
+import { useRoute } from 'vue-router'
+import { inject } from 'vue'
+import { Services } from '@/scripts/services'
+import { useDisplay } from 'vuetify'
+
+
+const display = inject(Services.Display, () => reactive(useDisplay())) as unknown as ReturnType<
+  typeof useDisplay
+>
 
 const guess = ref('')
 const game = reactive(new WordleGame())
@@ -43,13 +80,25 @@ const clickSound = new Audio(clicking_button)
 const timer = ref(0)
 const sec = ref(0)
 const min = ref(0)
+const overlay = ref(true)
+const isWordOfTheDay = ref(false)
+const wordOfTheDayDate = ref<Date | null>(null)
+const route = useRoute()
+const pat = ref<string>(route.path)
 
-startGame()
+var todayword = ref<todayWord[]>([])
+
+interface todayWord {
+  word: string
+  date: Date
+}
+
 
 
 console.log(game.secretWord)
 
 onMounted(async () => {
+  startGame()
   window.addEventListener('keyup', keyPress)
 })
 onUnmounted(() => {
@@ -59,19 +108,75 @@ onUnmounted(() => {
 
 function startGame() {
   //should restart game here
+  if(pat.value == '/worldoftheday'){
+    isWordOfTheDay.value = true
+  } else {
+    isWordOfTheDay.value = false
+  }
+  
+  overlay.value = true
+  let apiPath = 'word'
+  if (isWordOfTheDay.value) {
+    apiPath = `word/wordOfTheDay?offsetInHours=${new Date().getTimezoneOffset() / -60} `
+    if(route.query.date){
+      apiPath += `&date=${route.query.date}`
+    }
+    Axios.get(apiPath)
+    .then((response) => {
+      todayword.value = [response.data]
+      game.restartGame(todayword.value[0].word)
+      console.log(game.secretWord)
+      setTimeout(() => {
+        overlay.value = false
+      }, 502)
+    })
+    .catch((error) => {
+      console.log(error)
+      game.restartGame(WordsService.getRandomWord())
+      console.log(game.secretWord)
+      overlay.value = false
+    })
+  } else {
+  apiPath = 'word'
+  
+  Axios.get(apiPath)
+    .then((response) => {
+      game.restartGame(response.data)
+      console.log(game.secretWord)
+      setTimeout(() => {
+        overlay.value = false
+      }, 502)
+    })
+    .catch((error) => {
+      console.log(error)
+      game.restartGame(WordsService.getRandomWord())
+      console.log(game.secretWord)
+      overlay.value = false
+    })
+  
+  }
+
   timer.value = 0
   sec.value = 0
   let check = setInterval(() => {
     if(game.status == WordleGameStatus.Won || game.status == WordleGameStatus.Lost){
       clearInterval(check)
-      
-      Axios.post(`Player/AddPlayer?newName=${localStorage.getItem('username')}&playTime=${timer.value}&guesses=${game.guessNum}`)
-       .then((response): void => {
-        console.log(response.data)
+      if(pat.value == '/worldoftheday'){
+        Axios.post(`Player/AddGameResult?Name=${localStorage.getItem('username')}&WasGameWon=${true}&Attempts=${game.guessNum}&TimeInSecounds=${timer.value}&WordPlayed=${game.secretWord}&WordOfTheDayDate=${todayword.value[0].date}`)
+        .then((response): void => {
+          console.log(response.data)
       }) 
-        .catch((error) => {
-        console.log(error)
-      })
+          .catch((error) => {
+          console.log(error)
+      })}
+      else{
+        Axios.post(`Player/AddPlayer?newName=${localStorage.getItem('username')}&playTime=${timer.value}&guesses=${game.guessNum}`)
+        .then((response): void => {
+          console.log(response.data)
+        }) 
+          .catch((error) => {
+          console.log(error)
+        })}
     } else {
       timer.value += 1
       sec.value += 1
@@ -79,35 +184,6 @@ function startGame() {
   }, 1000)
 }
 
-
-/*
-function addWord() {
-  overlay.value = true
-  Axios.post('word/AddWordFromBody', {
-    text: 'strin',
-    isCommon: true,
-    isUsed: false
-  })
-    .then((response) => {
-      overlay.value = false
-      console.log(response.data)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-}
-Axios.get('word')
-  .then((response) => {
-    game.restartGame(response.data)
-    console.log(game.secretWord)
-    setTimeout(() => {
-      overlay.value = false
-    }, 502)
-  })
-  .catch((error) => {
-    console.log(error)
-  })
-*/
 watch(
   guess,
   (newGuess, oldGuess) => {
@@ -127,7 +203,15 @@ watch(
     }
   }
 )
-
+watch(
+  () => route.path,
+  (newPath, oldPath) => {
+    if (newPath !== pat.value) {
+      pat.value = newPath;
+      startGame();
+    }
+  }
+)
 
 
 
