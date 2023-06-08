@@ -35,5 +35,11 @@ namespace Wordle.Api.Controllers
         {
              return await _playerService.AddGameResult(Name, WasGameWon, Attempts, TimeInSecounds, WordPlayed, WordOfTheDayDate);
         }
+
+        [HttpGet("GetPlayer")]
+        public async Task<Player> GetPlayer(String Name)
+        {
+            return await _playerService.GetPlayer(Name);
+        }
     }
 }

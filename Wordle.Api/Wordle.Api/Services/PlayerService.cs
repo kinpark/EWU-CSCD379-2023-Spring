@@ -42,6 +42,7 @@ namespace Wordle.Api.Services
             }
             else
             {
+                
                 player = new()
                 {
                     Name = Name,
@@ -49,8 +50,9 @@ namespace Wordle.Api.Services
                     TotalAttempts = TotalAttempts,
                     AverageAttempts = TotalAttempts,
                     TotalSecondsPlayed = TotalSecondsPlayed,
-                    AverageSecondsPerGame = TotalSecondsPlayed,
+                    AverageSecondsPerGame = TotalSecondsPlayed
                 };
+                
                 _db.Players.Add(player);
             }
             await _db.SaveChangesAsync();
@@ -138,6 +140,17 @@ namespace Wordle.Api.Services
 
             return player;
             throw new ArgumentException("Player Id or Word not found");
+        }
+
+        public async Task<Player> GetPlayer(String Name)
+        {
+            if (Name == null) { throw new ArgumentException("Name can't be null"); }
+            var player = await _db.Players.FirstOrDefaultAsync(p => p.Name == Name);
+            if(player != null)
+            {
+                return player;
+            }
+            else { throw new ArgumentException("Name must be in the database"); }
         }
     }
 }

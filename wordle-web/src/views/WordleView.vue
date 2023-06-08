@@ -67,11 +67,13 @@ import { useRoute } from 'vue-router'
 import { inject } from 'vue'
 import { Services } from '@/scripts/services'
 import { useDisplay } from 'vuetify'
+import type { SignInService } from '@/scripts/signInService'
 
 
 const display = inject(Services.Display, () => reactive(useDisplay())) as unknown as ReturnType<
   typeof useDisplay
 >
+const signInService = inject(Services.SignInService) as SignInService
 
 const guess = ref('')
 const game = reactive(new WordleGame())
@@ -105,6 +107,12 @@ onUnmounted(() => {
   window.removeEventListener('keyup', keyPress)
 })
 
+watch(
+  () => signInService.token,
+  (value) => {
+    console.log(`Signed in user: ${value.userName}`)
+  }
+)
 
 function startGame() {
   //should restart game here

@@ -40,10 +40,19 @@
           <v-list-item prepend-icon="mdi-table-clock" to="/lasttenwords">
             Last 10 Wordle of the day
           </v-list-item>
+          <v-list-item prepend-icon="mdi-playlist-edit" to="/wordeditor">
+            Word Editor
+          </v-list-item>
           <v-list-item prepend-icon="mdi-cog" @click.stop="setting = true" @click="drawer = !drawer">
             Setting
           </v-list-item>
-          <v-list-item prepend-icon="mdi-information" to="/about">
+          <v-list-item v-if="!signInService.isSignedIn" prepend-icon="mdi-account-cancel" @click="showSignInDialog = true">
+            Sign In
+          </v-list-item>
+          <v-list-item prepend-icon="mdi-account-check" v-if="signInService.isSignedIn" @click="signInService.signOut()">
+            Sign Out
+          </v-list-item>
+          <v-list-item prepend-icon="mdi-information" to="/about" v-if="signInService.isSignedIn">
             About 
           </v-list-item>
         </v-list-item-content>
@@ -79,6 +88,8 @@
     </v-card>
   </v-dialog>
 
+  <SignInDialog v-model="showSignInDialog"> </SignInDialog>
+
 </template>
 
 <script setup lang="ts">
@@ -88,15 +99,21 @@ import GameInstruction from './GameInstruction.vue'
 import { inject, reactive } from 'vue'
 import { useDisplay } from 'vuetify'
 import { Services } from '@/scripts/services'
+import SignInDialog from './SignInDialog.vue'
+import type { SignInService } from '@/scripts/signInService'
 
 const display = inject(Services.Display, () => reactive(useDisplay())) as unknown as ReturnType<
   typeof useDisplay
 >
 
+const signInService = inject(Services.SignInService) as SignInService
 
+
+const showSignInDialog = ref(false)
 const theme = useTheme()
 const drawer = ref (false)
 const setting = ref (false)
+
 
 function setTheme(themecolor: string){
   if(themecolor === "light" )

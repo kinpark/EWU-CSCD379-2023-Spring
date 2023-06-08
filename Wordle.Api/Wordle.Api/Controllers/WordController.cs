@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Wordle.Api.Data;
 using Wordle.Api.Dtos;
+using Wordle.Api.Identity;
+using Wordle.Api.Models;
 using Wordle.Api.Services;
+
 
 namespace Wordle.Api.Controllers
 {
@@ -30,12 +34,13 @@ namespace Wordle.Api.Controllers
             return await _wordService.GetSeveralWords(count);
         }
 
-        [HttpPost]
+        [HttpPost("AddWord")]
         public async Task<Word> AddWord(string newWord, bool isCommon)
         {
             return await _wordService.AddWord(newWord, isCommon);
         }
 
+        [Authorize(Policy = Policies.EditWord)]
         [HttpPost("AddWordFromBody")]
         public async Task<Word> AddWordFromBody([FromBody] WordDto word)
         {
@@ -55,5 +60,19 @@ namespace Wordle.Api.Controllers
             int daysBack = 10;
             return await _wordService.GetDailyWordStatistics(date, daysBack, name);
         }
+
+        [Authorize(Policy = Policies.EditWord)]
+        [HttpPost("RemoveWord")]
+        public async Task<Word> RemoveWord(string? removeWord)
+        {
+            return await _wordService.RemoveWord(removeWord);
+        }
+
+        [HttpGet("WordList")]
+        public async Task<IEnumerable<Word>> WordList()
+        {
+            return await _wordService.WordList();
+        }
+
     }
 }    
