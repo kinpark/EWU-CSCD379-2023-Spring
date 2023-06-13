@@ -8,8 +8,10 @@ namespace Wordle.Api.Data
         public int PlayerId {  get; set; }
         public required string Name { get; set; }
         public int GameCount { get; set; }
-        public int TotalAttempts { get; set; }
-        public double AverageAttempts { get; set; }
+        public int GamesWon { get; set; }
+        public double WinLossAverage { get; set; }
+        public int TotalMoves { get; set; }
+        public double AverageMoves { get; set; }
         public int TotalSecondsPlayed { get; set; }
         public int AverageSecondsPerGame { get; set; }
 
@@ -25,8 +27,8 @@ namespace Wordle.Api.Data
                     {
                         Name = parts[0],
                         GameCount = int.Parse(parts[1]),
-                        TotalAttempts = int.Parse(parts[2]),
-                        AverageAttempts = double.Parse(parts[3]),
+                        TotalMoves = int.Parse(parts[2]),
+                        AverageMoves = double.Parse(parts[3]),
                         TotalSecondsPlayed = int.Parse(parts[4]),
                         AverageSecondsPerGame = int.Parse(parts[5])
                     };

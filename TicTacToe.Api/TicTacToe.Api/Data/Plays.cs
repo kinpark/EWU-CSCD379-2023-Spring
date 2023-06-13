@@ -11,7 +11,7 @@ namespace Wordle.Api.Data
         public int PlayerId { get; set; }
         public required Player Player { get; set; }
 
-        public int Attempts { get; set; }
+        public int Moves { get; set; }
         public int TimeInSeconds { get; set; }
         public DateTime Date { get; set; }
         public bool WasGameWon { get; set; }

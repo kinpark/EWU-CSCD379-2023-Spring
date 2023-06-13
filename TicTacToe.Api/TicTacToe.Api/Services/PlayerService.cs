@@ -20,39 +20,62 @@ namespace Wordle.Api.Services
         {
 
             var topTen = await _db.Players
-                .OrderBy(p => p.AverageAttempts)
+                .OrderBy(p => p.AverageMoves)
                 .ThenByDescending(p => p.GameCount)
+                .ThenByDescending(p => p.WinLossAverage)
                 .Take(10)
                 .ToListAsync();
             return topTen;
 
         }
         
-        public async Task<Player> AddPlayer(string Name, int TotalSecondsPlayed, int TotalAttempts)
+        public async Task<Player> AddPlayer(string Name, int TotalSecondsPlayed, int TotalMoves, bool WonGame)
         {
             if(Name == null) { throw new ArgumentException("Name can't be null"); }
             var player = await _db.Players.FirstOrDefaultAsync(p =>  p.Name == Name);
-            if(player != null) 
-            {   
+            if (player != null)
+            {
                 player.GameCount++;
-                player.TotalAttempts += TotalAttempts;
-                player.AverageAttempts = player.TotalAttempts / player.GameCount;
+
+                if (WonGame)
+                    player.GamesWon++;
+
+                player.WinLossAverage = player.GamesWon / player.GameCount;
+                player.TotalMoves += TotalMoves;
+                player.AverageMoves = player.TotalMoves / player.GameCount;
                 player.TotalSecondsPlayed += TotalSecondsPlayed;
                 player.AverageSecondsPerGame = player.TotalSecondsPlayed / player.GameCount;
             }
             else
             {
-                
-                player = new()
+                if (WonGame) 
+                { 
+                    player = new()
+                    {
+                        Name = Name,
+                        GameCount = 1,
+                        GamesWon = 1,
+                        WinLossAverage = 1,
+                        TotalMoves = TotalMoves,
+                        AverageMoves = TotalMoves,
+                        TotalSecondsPlayed = TotalSecondsPlayed,
+                        AverageSecondsPerGame = TotalSecondsPlayed
+                    };
+                }
+                else
                 {
-                    Name = Name,
-                    GameCount = 1,
-                    TotalAttempts = TotalAttempts,
-                    AverageAttempts = TotalAttempts,
-                    TotalSecondsPlayed = TotalSecondsPlayed,
-                    AverageSecondsPerGame = TotalSecondsPlayed
-                };
-                
+                    player = new()
+                    {
+                        Name = Name,
+                        GameCount = 1,
+                        GamesWon = 0,
+                        WinLossAverage = 0,
+                        TotalMoves = TotalMoves,
+                        AverageMoves = TotalMoves,
+                        TotalSecondsPlayed = TotalSecondsPlayed,
+                        AverageSecondsPerGame = TotalSecondsPlayed
+                    };
+                }
                 _db.Players.Add(player);
             }
             await _db.SaveChangesAsync();
@@ -92,9 +115,9 @@ namespace Wordle.Api.Services
         }
         
 
-        public async Task<Player?> AddGameResult(string Name, bool WasGameWon, int Attempts, int TimeInSeconds, string WordPlayed, DateTime WordOfTheDayDate)
+        public async Task<Player?> AddGameResult(string Name, bool WasGameWon, int Moves, int TimeInSeconds, string WordPlayed, DateTime WordOfTheDayDate)
         {
-            await AddPlayer(Name, TimeInSeconds, Attempts);
+            await AddPlayer(Name, TimeInSeconds, Moves, WasGameWon);
             var player = await _db.Players.FirstOrDefaultAsync(n => n.Name == Name);
 
                 if (player is not null)
@@ -103,7 +126,7 @@ namespace Wordle.Api.Services
                     Plays play = new()
                     {
                         Player = player,
-                        Attempts = Attempts,
+                        Moves = Moves,
                         TimeInSeconds = TimeInSeconds,
                         WasGameWon = WasGameWon,
                     };
