@@ -17,15 +17,7 @@ export class Letter {
   }
 
   get color() {
-    switch (this.status) {
-      case LetterStatus.Correct:
-        return 'correct'
-      case LetterStatus.Misplaced:
-        return 'misplaced'
-      case LetterStatus.Wrong:
-        return 'wrong'
-      default:
         return 'grey'
     }
   }
-}
+

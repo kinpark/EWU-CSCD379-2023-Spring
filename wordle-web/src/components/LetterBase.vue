@@ -3,8 +3,9 @@
     :color="props.color"
     :elevation="12"
     :flat="true"
-    class = "my-button"
-    >{{ props.char }}
+    class="my-button"
+  >
+    <div class="letter">{{ props.char }}</div>
   </v-btn>
 </template>
 
@@ -22,13 +23,17 @@ const props = withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .my-button {
-  width: 50px;
-  min-width: 50px;
-  height: 50px;
-  min-height: 50px;
+  width: 100px;
+  min-width: 100px;
+  height: 100px;
+  min-height: 100px;
   background-image: linear-gradient(to right, #00000040, #FFFFFF40) !important;
 }
 
+.letter {
+  font-size: 85px;
+  color: white;
+}
 </style>
 
 

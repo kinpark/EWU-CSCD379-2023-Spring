@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import WordleView from '../views/WordleView.vue'
+import TikTacToe from '../views/TikTacToe.vue'
 import LeaderboardView from '../views/LeaderboardView.vue'
 import LastTenWords from '@/views/LastTenWords.vue'
 import { Services } from '@/scripts/services'
@@ -17,9 +17,9 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/wordle',
-      name: 'wordle',
-      component: WordleView
+      path: '/TikTacToe',
+      name: 'TikTacToe',
+      component: TikTacToe
     },
     {
       path: '/leaderboard',
@@ -31,11 +31,6 @@ const router = createRouter({
       path: '/lasttenwords',
       name: 'lastTenWords',
       component: LastTenWords
-    },
-    {
-      path: '/worldoftheday',
-      name: 'wordOfTheDay',
-      component: WordleView
     },
     {
       path: '/wordeditor',
