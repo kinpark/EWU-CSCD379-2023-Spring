@@ -12,8 +12,8 @@ using Wordle.Api.Data;
 namespace TicTacToe.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230614031217_RemoveMovesTimes")]
-    partial class RemoveMovesTimes
+    [Migration("20230614032002_TTTUpdate")]
+    partial class TTTUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
