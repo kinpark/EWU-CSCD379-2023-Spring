@@ -20,16 +20,15 @@ namespace Wordle.Api.Services
         {
 
             var topTen = await _db.Players
-                .OrderBy(p => p.AverageMoves)
+                .OrderBy(p => p.WinLossAverage)
                 .ThenByDescending(p => p.GameCount)
-                .ThenByDescending(p => p.WinLossAverage)
                 .Take(10)
                 .ToListAsync();
             return topTen;
 
         }
         
-        public async Task<Player> AddPlayer(string Name, int TotalSecondsPlayed, int TotalMoves, bool WonGame)
+        public async Task<Player> AddPlayer(string Name, bool WonGame)
         {
             if(Name == null) { throw new ArgumentException("Name can't be null"); }
 
@@ -41,11 +40,7 @@ namespace Wordle.Api.Services
                     GameCount = 0,
                     GamesWon = 0,
                     WinLossAverage = 0,
-                    TotalMoves = 0,
-                    AverageMoves = 0,
-                    TotalSecondsPlayed = 0,
-                    AverageSecondsPerGame = 0
-                }
+                };
 
                 return guest;
             }
@@ -59,10 +54,6 @@ namespace Wordle.Api.Services
                     player.GamesWon++;
 
                 player.WinLossAverage = player.GamesWon / player.GameCount;
-                player.TotalMoves += TotalMoves;
-                player.AverageMoves = player.TotalMoves / player.GameCount;
-                player.TotalSecondsPlayed += TotalSecondsPlayed;
-                player.AverageSecondsPerGame = player.TotalSecondsPlayed / player.GameCount;
             }
             else
             {
@@ -74,10 +65,6 @@ namespace Wordle.Api.Services
                         GameCount = 1,
                         GamesWon = 1,
                         WinLossAverage = 1,
-                        TotalMoves = TotalMoves,
-                        AverageMoves = TotalMoves,
-                        TotalSecondsPlayed = TotalSecondsPlayed,
-                        AverageSecondsPerGame = TotalSecondsPlayed
                     };
                 }
                 else
@@ -88,10 +75,6 @@ namespace Wordle.Api.Services
                         GameCount = 1,
                         GamesWon = 0,
                         WinLossAverage = 0,
-                        TotalMoves = TotalMoves,
-                        AverageMoves = TotalMoves,
-                        TotalSecondsPlayed = TotalSecondsPlayed,
-                        AverageSecondsPerGame = TotalSecondsPlayed
                     };
                 }
                 _db.Players.Add(player);
@@ -133,9 +116,9 @@ namespace Wordle.Api.Services
         }
         
 
-        public async Task<Player?> AddGameResult(string Name, bool WasGameWon, int Moves, int TimeInSeconds, string WordPlayed)
+        public async Task<Player?> AddGameResult(string Name, bool WasGameWon)
         {
-            await AddPlayer(Name, TimeInSeconds, Moves, WasGameWon);
+            await AddPlayer(Name, WasGameWon);
             var player = await _db.Players.FirstOrDefaultAsync(n => n.Name == Name);
 
                 if (player is not null)
@@ -144,8 +127,6 @@ namespace Wordle.Api.Services
                     Plays play = new()
                     {
                         Player = player,
-                        Moves = Moves,
-                        TimeInSeconds = TimeInSeconds,
                         WasGameWon = WasGameWon,
                     };
 
