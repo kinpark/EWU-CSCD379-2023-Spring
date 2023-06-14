@@ -265,7 +265,7 @@ namespace Wordle.Api.Migrations
 
                     b.HasKey("PlayerId");
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("Wordle.Api.Data.Plays", b =>
@@ -295,7 +295,7 @@ namespace Wordle.Api.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("Plays");
+                    b.ToTable("Plays", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
