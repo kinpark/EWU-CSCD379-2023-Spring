@@ -8,7 +8,7 @@ using Wordle.Api.Data;
 
 #nullable disable
 
-namespace Wordle.Api.Migrations
+namespace TicTacToe.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot

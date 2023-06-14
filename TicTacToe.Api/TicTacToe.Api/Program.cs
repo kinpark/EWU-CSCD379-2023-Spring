@@ -127,7 +127,7 @@ if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool>("UseSwag
 
 // Add a redirect for the root URL
 var redirectRootUrl = app.Configuration.GetValue<string>("RedirectRootUrl", "");
-if (string.IsNullOrEmpty(redirectRootUrl)) redirectRootUrl = "https://brave-forest-08291851e.3.azurestaticapps.net/";
+if (string.IsNullOrEmpty(redirectRootUrl)) redirectRootUrl = "https://lively-mud-0c1748210.3.azurestaticapps.net/";
 var options = new RewriteOptions()
         .AddRedirect("^$", redirectRootUrl, 302);
 app.UseRewriter(options);

@@ -24,8 +24,8 @@ namespace Wordle.Api.Data
                         Name = parts[0],
                         GameCount = int.Parse(parts[1]),
                         GamesWon = int.Parse(parts[2]),
-                        WinLossAverage = int.Parse(parts[2]) / int.Parse(parts[1])
                     };
+                    player.WinLossAverage = player.GamesWon / player.GameCount;
                     db.Players.Add(player);
                 }
                 db.SaveChanges();
