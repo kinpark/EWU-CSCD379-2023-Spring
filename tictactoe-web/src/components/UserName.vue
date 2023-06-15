@@ -17,7 +17,7 @@
     </v-card>
   </v-dialog>
 
-  <v-dialog v-model="user2" width="300" persistent :disabled="multi">
+  <v-dialog v-model="user2" width="300" persistent>
     <template v-slot:activator="{ props }">
       <v-btn v-bind="props" class="player2-box" color="secondary">
         <strong>{{ player2 }}</strong>
@@ -44,7 +44,6 @@ const user1 = ref(false)
 const user2 = ref(false)
 const player1 = ref('Player 1')
 const player2 = ref('Player 2')
-const multi = ref(true)
 const route = useRoute()
 const pat = ref<string>(route.path)
 
@@ -55,15 +54,18 @@ onMounted(() => {
   } else if (localStorage.getItem('player1') === null) {
     localStorage.setItem('player1', 'Player 1')
   }
+  if(pat.value === '/TikTacToe') {
+    localStorage.setItem('player2', 'Player 2')
+    player2.value = 'Player 2'
+  }
 
   if (pat.value === '/Hardbot') {
     localStorage.setItem('player2', 'Hard bot')
     player2.value = 'Hard bot'
-    multi.value = false
+    
   } else if (pat.value === '/Easybot') {
     localStorage.setItem('player2', 'Easy bot')
     player2.value = 'Easy bot'
-    multi.value = false
   } else if (localStorage.getItem('player2') != null) {
     player2.value = localStorage.getItem('player2')!
   } else if (localStorage.getItem('player2') === null) {
