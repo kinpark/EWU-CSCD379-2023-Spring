@@ -53,7 +53,7 @@ namespace Wordle.Api.Services
                 if (WonGame)
                     player.GamesWon++;
 
-                player.WinLossAverage = (player.GamesWon / player.GameCount)*100;
+                player.WinLossAverage = ((double)player.GamesWon / (double)player.GameCount)*100;
             }
             else
             {

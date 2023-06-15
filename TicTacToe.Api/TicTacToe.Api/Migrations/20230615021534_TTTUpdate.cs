@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TicTacToe.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class TTTupdate : Migration
+    public partial class TTTUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
