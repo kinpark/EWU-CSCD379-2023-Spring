@@ -19,8 +19,10 @@ export class TikTacToeGame {
     ['b2', 'b3'], //4
     ['c2', 'c3'], //5
     ['a1', 'b1'], //6
+    */
     ['a2', 'b2'], //7
     ['a3', 'b3'], //8
+    /*
     ['b1', 'c1'], //9
     ['b2', 'c2'], //10
     ['b3', 'c3'], //11
@@ -36,6 +38,8 @@ export class TikTacToeGame {
     ['c3', 'c2', 'b2'], //19
     */
     ['a3', 'b1', 'c3'], //20
+    ['a3', 'b3', 'b2'], //21
+
   ]
 
   static readonly #answermove = [
@@ -47,8 +51,10 @@ export class TikTacToeGame {
     ['b1'], //4
     ['c1'], //5
     ['c1'], //6
+    */
     ['c2'], //7
     ['c3'], //8
+    /*
     ['a1'], //9
     ['a2'], //10
     ['a3'], //11
@@ -64,6 +70,7 @@ export class TikTacToeGame {
     ['a1'], //19
     */
     ['b3'], //20
+    ['b1'], //21
   ]
 
   getAnswerMove(player1Moves: string[], player2Moves: string[]): string {  

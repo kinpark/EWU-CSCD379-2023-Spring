@@ -6,7 +6,7 @@
     <v-btn @click="$router.push('/TikTacToe')" color="primary">Tic Tac Toe </v-btn>
     <br />
     <br />
-    <h3><v-icon icon="mdi-skull"></v-icon> A game a casual game of Tic Tac Toe against a hard bot <v-icon icon="mdi-skull"></v-icon></h3>
+    <h3><v-icon icon="mdi-skull"></v-icon> A game a not casual game of Tic Tac Toe against a hard bot <v-icon icon="mdi-skull"></v-icon></h3>
     <v-btn @click="$router.push('/Hardbot')" color="primary">Hard Bot</v-btn>
     <br />
     <br />

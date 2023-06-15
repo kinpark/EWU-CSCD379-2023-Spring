@@ -2,7 +2,7 @@
   <v-dialog v-model="user1" width="300" persistent>
     <template v-slot:activator="{ props }">
       <v-btn class="player1-box" v-bind="props" color="secondary">
-        {{ player1 }}
+        <strong>{{ player1 }}</strong>
       </v-btn>
     </template>
 
@@ -17,10 +17,10 @@
     </v-card>
   </v-dialog>
 
-  <v-dialog v-model="user2" width="300" persistent>
+  <v-dialog v-model="user2" width="300" persistent :disabled="multi">
     <template v-slot:activator="{ props }">
       <v-btn v-bind="props" class="player2-box" color="secondary">
-        {{ player2 }}
+        <strong>{{ player2 }}</strong>
       </v-btn>
     </template>
 
@@ -38,19 +38,34 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+
 
 const user1 = ref(false)
 const user2 = ref(false)
 const player1 = ref('Player 1')
 const player2 = ref('Player 2')
+const multi = ref(true)
+const route = useRoute()
+const pat = ref<string>(route.path)
 
 onMounted(() => {
+  const multi = ref(true)
   if (localStorage.getItem('player1') != null) {
     player1.value = localStorage.getItem('player1')!
   } else if (localStorage.getItem('player1') === null) {
     localStorage.setItem('player1', 'Player 1')
   }
-  if (localStorage.getItem('player2') != null) {
+
+  if (pat.value === '/Hardbot') {
+    localStorage.setItem('player2', 'Hard bot')
+    player2.value = "Hard bot"
+    multi.value = false
+  } else if (pat.value === '/Easybot') {
+    localStorage.setItem('player2', 'Easy bot')
+    player2.value = "Easy bot"
+    multi.value = false
+  } else if (localStorage.getItem('player2') != null) {
     player2.value = localStorage.getItem('player2')!
   } else if (localStorage.getItem('player2') === null) {
     localStorage.setItem('player2', 'Player 2')
