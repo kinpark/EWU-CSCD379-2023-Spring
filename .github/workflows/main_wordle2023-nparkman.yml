@@ -8,7 +8,7 @@ on:
     branches:
       - main
     paths: 
-      - TicTacToe.Api/TicTacToe.Api/TicTacToe.Api.csproj
+      - TicTacToe.Api/**
   workflow_dispatch:
 
 jobs:
