@@ -40,8 +40,7 @@ export class TikTacToeGame {
     */
     ['a3', 'b1', 'c3'], //20
     ['a3', 'b3', 'b2'], //21
-    ['a3'], //22
-
+    ['a3'] //22
   ]
 
   static readonly #answermove = [
@@ -74,24 +73,26 @@ export class TikTacToeGame {
     */
     ['b3'], //20
     ['b1'], //21
-    ['c1'], //22
+    ['c1'] //22
   ]
 
-  getAnswerMove(player1Moves: string[], player2Moves: string[]): string {  
+  getAnswerMove(player1Moves: string[], player2Moves: string[]): string {
     for (let i = 0; i < TikTacToeGame.#possibewinmove.length; i++) {
-      const [move] = TikTacToeGame.#possibewinmove[i];
-      const answerMove = TikTacToeGame.#answermove[i][0];
-  
-      if (player1Moves.includes(move) && !player2Moves.includes(answerMove) && !player1Moves.includes(answerMove)) {
-        return TikTacToeGame.#answermove[i][0];
+      const [move] = TikTacToeGame.#possibewinmove[i]
+      const answerMove = TikTacToeGame.#answermove[i][0]
+
+      if (
+        player1Moves.includes(move) &&
+        !player2Moves.includes(answerMove) &&
+        !player1Moves.includes(answerMove)
+      ) {
+        return TikTacToeGame.#answermove[i][0]
       }
     }
-  
+
     // If no available answer move is found, return 'No move'
-    return 'No move';
+    return 'No move'
   }
-
-
 
   checkForWinner(player1Moves: string[], player2Moves: string[]) {
     for (const winningCombination of TikTacToeGame.#winningCombinations) {

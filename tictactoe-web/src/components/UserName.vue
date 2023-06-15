@@ -40,7 +40,6 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
-
 const user1 = ref(false)
 const user2 = ref(false)
 const player1 = ref('Player 1')
@@ -59,11 +58,11 @@ onMounted(() => {
 
   if (pat.value === '/Hardbot') {
     localStorage.setItem('player2', 'Hard bot')
-    player2.value = "Hard bot"
+    player2.value = 'Hard bot'
     multi.value = false
   } else if (pat.value === '/Easybot') {
     localStorage.setItem('player2', 'Easy bot')
-    player2.value = "Easy bot"
+    player2.value = 'Easy bot'
     multi.value = false
   } else if (localStorage.getItem('player2') != null) {
     player2.value = localStorage.getItem('player2')!

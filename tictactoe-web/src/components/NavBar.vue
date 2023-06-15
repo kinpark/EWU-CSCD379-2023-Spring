@@ -27,7 +27,9 @@
           <v-list-item-subtitle>Tic Tac Toe</v-list-item-subtitle>
           <v-list-item prepend-icon="mdi-home" to="/"> Home </v-list-item>
           <v-list-item prepend-icon="mdi-star" to="/TikTacToe"> Tic Tac Toe </v-list-item>
-          <v-list-item prepend-icon="mdi-baby-face" to="/Easybot"> Play Against Easy Bot </v-list-item>
+          <v-list-item prepend-icon="mdi-baby-face" to="/Easybot">
+            Play Against Easy Bot
+          </v-list-item>
           <v-list-item prepend-icon="mdi-skull" to="/Hardbot"> Play Against Hard Bot </v-list-item>
           <v-list-item prepend-icon="mdi-star-box" to="/leaderboard"> Leader Board </v-list-item>
           <v-list-item

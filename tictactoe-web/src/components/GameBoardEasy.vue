@@ -1,7 +1,9 @@
 <template>
   <v-row class="justify-center">
     <v-col cols="auto">
-      <h1><Strong>Tic Tac Toe against <v-icon icon="mdi-baby-face"></v-icon> EASY bot</Strong></h1>
+      <h1>
+        <Strong>Tic Tac Toe against <v-icon icon="mdi-baby-face"></v-icon> EASY bot</Strong>
+      </h1>
     </v-col>
   </v-row>
 
@@ -29,9 +31,11 @@
     </v-col>
   </v-row>
 
-  <div class="text-h4 text-center mt-10" v-if="win=== 'X player wins!'">Player win!</div>
-  <div class="text-h4 text-center mt-10" v-if="!win && movecount === 9"> It's a draw! </div>
-    <div class="text-h4 text-center mt-10" v-if="win=== 'O player wins!'"><v-icon icon="mdi-baby-carriage"></v-icon> Bot win! <v-icon icon="mdi-baby-carriage"></v-icon></div>
+  <div class="text-h4 text-center mt-10" v-if="win === 'X player wins!'">Player win!</div>
+  <div class="text-h4 text-center mt-10" v-if="!win && movecount === 9">It's a draw!</div>
+  <div class="text-h4 text-center mt-10" v-if="win === 'O player wins!'">
+    <v-icon icon="mdi-baby-carriage"></v-icon> Bot win! <v-icon icon="mdi-baby-carriage"></v-icon>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -161,17 +165,15 @@ function postresult() {
     .catch((error) => {
       console.log(error)
     })
-    Axios.post(
-      `Player/AddPlayer?newName=Easybot&WonGame=${
-        win.value === 'O player wins!' ? true : false
-      }`
-    )
-      .then((response): void => {
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+  Axios.post(
+    `Player/AddPlayer?newName=Easybot&WonGame=${win.value === 'O player wins!' ? true : false}`
+  )
+    .then((response): void => {
+      console.log(response.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 </script>
 
