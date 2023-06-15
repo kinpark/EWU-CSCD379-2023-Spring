@@ -41,7 +41,6 @@ export class SignInService {
       this.signOut()
       return false
     }
-    
   }
 
   public signOut() {

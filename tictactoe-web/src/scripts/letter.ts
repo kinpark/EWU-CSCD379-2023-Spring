@@ -17,7 +17,6 @@ export class Letter {
   }
 
   get color() {
-        return 'grey'
-    }
+    return 'grey'
   }
-
+}

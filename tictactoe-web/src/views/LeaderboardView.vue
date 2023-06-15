@@ -2,43 +2,37 @@
   <v-sheet>
     <v-card>
       <div class="text-center">
-      <img src="../assets/golden-cup.png" alt="goldcup" height="100" />
-      <v-card-title><strong>Leader Board</strong></v-card-title>
+        <img src="../assets/golden-cup.png" alt="goldcup" height="100" />
+        <v-card-title><strong>Leader Board</strong></v-card-title>
       </div>
       <template v-for="player in playerData" v-bind:key="player.name">
-        <v-progress-linear 
+        <v-progress-linear
           :model-value="player.winLossAverage"
           max="100"
           color="#757575"
           height="25"
           striped
         >
-        <strong>{{ player.name }}</strong>
+          <strong>{{ player.name }}</strong>
         </v-progress-linear>
         <div class="text-center">
-          Game Count: {{ player.gameCount }}, Game Won: {{ player.gamesWon }}, Average Win/Loss: {{ player.winLossAverage.toFixed(2) }} </div>
+          Game Count: {{ player.gameCount }}, Game Won: {{ player.gamesWon }}, Average Win/Loss:
+          {{ player.winLossAverage.toFixed(2) }}
+        </div>
       </template>
       <div class="text-center">
-      <v-btn @click="$router.back()" color="primary">Back</v-btn>
+        <v-btn @click="$router.back()" color="primary">Back</v-btn>
       </div>
     </v-card>
   </v-sheet>
 
-  <v-overlay
-      :model-value="overlay"
-      class="align-center justify-center"
-    >
-      <v-progress-circular
-        color="primary"
-        indeterminate
-        size="64"
-      ></v-progress-circular>
-    </v-overlay>
-
+  <v-overlay :model-value="overlay" class="align-center justify-center">
+    <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
+  </v-overlay>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 import Axios from 'axios'
 
 var playerData = ref<PlayerData[]>([])
@@ -48,7 +42,7 @@ interface PlayerData {
   name: string
   gameCount: number
   gamesWon: number
-  winLossAverage  : number
+  winLossAverage: number
 }
 
 Axios.get('Player/GetTopTen')
@@ -60,18 +54,13 @@ Axios.get('Player/GetTopTen')
   .catch((error) => {
     console.log(error)
   })
-
-
 </script>
 
 <style scoped>
- .v-progress-linear {
+.v-progress-linear {
   border-radius: 8px;
   width: 99%;
   margin-bottom: 10px;
 }
 </style>
 ```
-
-
-

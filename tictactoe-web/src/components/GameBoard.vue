@@ -5,23 +5,23 @@
     </v-col>
   </v-row>
 
-<div>
-  <v-row class="justify-center" dense v-for="(row, rowIndex) in grid" :key="rowIndex" >
-    <v-col cols="auto" dense v-for="(letter, columnIndex) in row" :key="columnIndex">
-      <LetterBase 
-        :char="letter.char"
-        :color="letter.color"
-        @click="updateChar(rowIndex, columnIndex)"
-        :disabled="letter.clicked"
-      ></LetterBase>
-    </v-col>
-  </v-row>
-</div>
-  
-<UserName class="boardfix" />
+  <div>
+    <v-row class="justify-center" dense v-for="(row, rowIndex) in grid" :key="rowIndex">
+      <v-col cols="auto" dense v-for="(letter, columnIndex) in row" :key="columnIndex">
+        <LetterBase
+          :char="letter.char"
+          :color="letter.color"
+          @click="updateChar(rowIndex, columnIndex)"
+          :disabled="letter.clicked"
+        ></LetterBase>
+      </v-col>
+    </v-row>
+  </div>
 
-<br/>
-<br/>
+  <UserName class="boardfix" />
+
+  <br />
+  <br />
 
   <v-row class="justify-center">
     <v-col cols="auto">
@@ -30,7 +30,6 @@
   </v-row>
 
   <div class="text-h4 text-center mt-10" v-if="win">{{ win }}</div>
-
 </template>
 
 <script setup lang="ts">
@@ -58,7 +57,6 @@ const player2Moves = ref<string[]>([])
 let currentPlayer = 'player1'
 const grid = ref([...props.grid])
 const movecount = ref(0)
-
 
 function updateChar(rowIndex: number, columnIndex: number) {
   const position = getPosition(rowIndex, columnIndex)
@@ -96,8 +94,8 @@ function restartGame() {
   win.value = null
   movecount.value = 0
   currentPlayer = 'player1'
-  grid.value.forEach(row => {
-    row.forEach(letter => {
+  grid.value.forEach((row) => {
+    row.forEach((letter) => {
       letter.char = ''
       letter.color = ''
       letter.clicked = false
@@ -114,13 +112,13 @@ function checkForWinner() {
     highlightWinningCombination(winningCombination as string[])
     postresult()
   } else if (movecount.value === 9) {
-    win.value = 'It\'s a draw'
+    win.value = "It's a draw"
     postresult()
   }
 }
 
 function highlightWinningCombination(winningCombination: string[]): void {
-  winningCombination.forEach(position => {
+  winningCombination.forEach((position) => {
     const rowIndex = position.charCodeAt(0) - 97
     const columnIndex = parseInt(position[1]) - 1
     grid.value[rowIndex][columnIndex].color = 'correct'
@@ -128,22 +126,29 @@ function highlightWinningCombination(winningCombination: string[]): void {
 }
 
 function postresult() {
-  Axios.post(`Player/AddPlayer?newName=${localStorage.getItem('player1')}&WonGame=${win.value === 'X player wins!' ? true : false}`)
+  Axios.post(
+    `Player/AddPlayer?newName=${localStorage.getItem('player1')}&WonGame=${
+      win.value === 'X player wins!' ? true : false
+    }`
+  )
     .then((response): void => {
-          console.log(response.data)
-      }) 
-          .catch((error) => {
-          console.log(error)
-      })
-      Axios.post(`Player/AddPlayer?newName=${localStorage.getItem('player2')}&WonGame=${win.value === 'O player wins!' ? true : false}`)
+      console.log(response.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  Axios.post(
+    `Player/AddPlayer?newName=${localStorage.getItem('player2')}&WonGame=${
+      win.value === 'O player wins!' ? true : false
+    }`
+  )
     .then((response): void => {
-          console.log(response.data)
-      }) 
-          .catch((error) => {
-          console.log(error)
-      })
+      console.log(response.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
-
 </script>
 
 <style scoped>

@@ -13,40 +13,45 @@
         <v-btn to="/Easybot">Play against bot</v-btn>
       </v-toolbar-items>
       <v-toolbar-items>
-        <v-app-bar-nav-icon @click="setTheme('default')" icon="mdi-theme-light-dark"> </v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="setTheme('default')" icon="mdi-theme-light-dark">
+        </v-app-bar-nav-icon>
         <v-app-bar-nav-icon @click.stop="setting = true" icon="mdi-cog"></v-app-bar-nav-icon>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       </v-toolbar-items>
-    </v-toolbar>  
+    </v-toolbar>
 
     <v-navigation-drawer location="right" @click.stop="drawer = !drawer" v-model="drawer" temporary>
-      <v-list-item >
+      <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">Tic Tac Toe</v-list-item-title>
           <v-list-item-subtitle>Tic Tac Toe</v-list-item-subtitle>
-          <v-list-item prepend-icon="mdi-home" to="/">
-            Home
-          </v-list-item>
-          <v-list-item prepend-icon="mdi-star" to="/TikTacToe">
-            Tic Tac Toe
-          </v-list-item>
-          <v-list-item prepend-icon="mdi-star" to="/Easybot">
-            Play Against Bot
-          </v-list-item>
-          <v-list-item prepend-icon="mdi-star-box" to="/leaderboard">
-            Leader Board
-          </v-list-item>
-          <v-list-item prepend-icon="mdi-cog" @click.stop="setting = true" @click="drawer = !drawer">
+          <v-list-item prepend-icon="mdi-home" to="/"> Home </v-list-item>
+          <v-list-item prepend-icon="mdi-star" to="/TikTacToe"> Tic Tac Toe </v-list-item>
+          <v-list-item prepend-icon="mdi-star" to="/Easybot"> Play Against Bot </v-list-item>
+          <v-list-item prepend-icon="mdi-star-box" to="/leaderboard"> Leader Board </v-list-item>
+          <v-list-item
+            prepend-icon="mdi-cog"
+            @click.stop="setting = true"
+            @click="drawer = !drawer"
+          >
             Setting
           </v-list-item>
-          <v-list-item v-if="!signInService.isSignedIn" prepend-icon="mdi-account-cancel" @click="showSignInDialog = true">
+          <v-list-item
+            v-if="!signInService.isSignedIn"
+            prepend-icon="mdi-account-cancel"
+            @click="showSignInDialog = true"
+          >
             Sign In
           </v-list-item>
-          <v-list-item prepend-icon="mdi-account-check" v-if="signInService.isSignedIn" @click="signInService.signOut()">
+          <v-list-item
+            prepend-icon="mdi-account-check"
+            v-if="signInService.isSignedIn"
+            @click="signInService.signOut()"
+          >
             Sign Out
           </v-list-item>
           <v-list-item prepend-icon="mdi-information" to="/about" v-if="signInService.isSignedIn">
-            About 
+            About
           </v-list-item>
         </v-list-item-content>
       </v-list-item>
@@ -70,7 +75,10 @@
             Tritanopia Dark Mode
           </v-list-item>
           <p>Light Mode Color Blind Theme</p>
-          <v-list-item @click="setTheme('Protanopia_DeuteranopiaLight')" prepend-icon="mdi-eye-plus-outline">
+          <v-list-item
+            @click="setTheme('Protanopia_DeuteranopiaLight')"
+            prepend-icon="mdi-eye-plus-outline"
+          >
             Protanopia/Deuteranopia Light Mode
           </v-list-item>
           <v-list-item @click="setTheme('TritanopiaLight')" prepend-icon="mdi-eye-plus-outline">
@@ -82,7 +90,6 @@
   </v-dialog>
 
   <SignInDialog v-model="showSignInDialog"> </SignInDialog>
-
 </template>
 
 <script setup lang="ts">
@@ -100,37 +107,25 @@ const display = inject(Services.Display, () => reactive(useDisplay())) as unknow
 
 const signInService = inject(Services.SignInService) as SignInService
 
-
 const showSignInDialog = ref(false)
 const theme = useTheme()
-const drawer = ref (false)
-const setting = ref (false)
+const drawer = ref(false)
+const setting = ref(false)
 
-
-function setTheme(themecolor: string){
-  if(themecolor === "light" )
-    theme.global.name.value = 'light'
-  else if(themecolor === "dark")
-    theme.global.name.value = 'dark'
-  else if(themecolor === "Protanopia_Deuteranopia")
+function setTheme(themecolor: string) {
+  if (themecolor === 'light') theme.global.name.value = 'light'
+  else if (themecolor === 'dark') theme.global.name.value = 'dark'
+  else if (themecolor === 'Protanopia_Deuteranopia')
     theme.global.name.value = 'Protanopia_Deuteranopia'
-  else if(themecolor === "Tritanopia")
-    theme.global.name.value = 'Tritanopia'
-  else if(themecolor === "Protanopia_DeuteranopiaLight")
+  else if (themecolor === 'Tritanopia') theme.global.name.value = 'Tritanopia'
+  else if (themecolor === 'Protanopia_DeuteranopiaLight')
     theme.global.name.value = 'Protanopia_DeuteranopiaLight'
-  else if(themecolor === "TritanopiaLight")
-    theme.global.name.value = 'TritanopiaLight'
-  else if(themecolor === "default")
+  else if (themecolor === 'TritanopiaLight') theme.global.name.value = 'TritanopiaLight'
+  else if (themecolor === 'default')
     if (theme.global.name.value == 'light') {
       theme.global.name.value = 'dark'
     } else if (theme.global.name.value == 'dark') {
       theme.global.name.value = 'light'
     } else theme.global.name.value = 'light'
-    }  
-
-
-  
+}
 </script>
-
-
-

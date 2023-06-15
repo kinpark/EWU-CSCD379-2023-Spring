@@ -19,22 +19,16 @@ const theme = useTheme()
 const display = reactive(useDisplay())
 provide(Services.Display, display)
 
-
-function setImageTheme(themecolor: string){
-  if(themecolor === "light" )
-    return 'lightThemeBackground'
-  else if(themecolor === "dark")
-    return 'darkThemeBackground'
-  else if(themecolor === "Protanopia_Deuteranopia")
-    return 'Protanopia_DeuteranopiaBackground'
-  else if(themecolor === "Tritanopia")
-    return 'TritanopiaBackground'
-  else if(themecolor === "Protanopia_DeuteranopiaLight")
+function setImageTheme(themecolor: string) {
+  if (themecolor === 'light') return 'lightThemeBackground'
+  else if (themecolor === 'dark') return 'darkThemeBackground'
+  else if (themecolor === 'Protanopia_Deuteranopia') return 'Protanopia_DeuteranopiaBackground'
+  else if (themecolor === 'Tritanopia') return 'TritanopiaBackground'
+  else if (themecolor === 'Protanopia_DeuteranopiaLight')
     return 'Protanopia_DeuteranopiaLightBackground'
-  else if(themecolor === "TritanopiaLight")
-    return 'TritanopiaLightBackground'
-    }
-    
+  else if (themecolor === 'TritanopiaLight') return 'TritanopiaLightBackground'
+}
+
 /*
 setTimeout(() => {
   // This is terrible, nasty, and should be removed.
@@ -56,7 +50,7 @@ setTimeout(() => {
   background: url('@/assets/pro-dark-low-poly.svg') no-repeat center center fixed !important;
   background-size: cover;
 }
-.TritanopiaBackground{
+.TritanopiaBackground {
   background: url('@/assets/tri-dark-low-poly.svg') no-repeat center center fixed !important;
   background-size: cover;
 }
@@ -64,7 +58,7 @@ setTimeout(() => {
   background: url('@/assets/pro-light-low-poly.svg') no-repeat center center fixed !important;
   background-size: cover;
 }
-.TritanopiaLightBackground{
+.TritanopiaLightBackground {
   background: url('@/assets/tri-light-low-poly.svg') no-repeat center center fixed !important;
   background-size: cover;
 }
