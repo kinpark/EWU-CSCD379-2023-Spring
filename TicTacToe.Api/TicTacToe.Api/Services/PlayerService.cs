@@ -20,7 +20,7 @@ namespace Wordle.Api.Services
         {
 
             var topTen = await _db.Players
-                .OrderBy(p => p.WinLossAverage)
+                .OrderByDescending(p => p.WinLossAverage)
                 .ThenByDescending(p => p.GameCount)
                 .Take(10)
                 .ToListAsync();
@@ -53,7 +53,7 @@ namespace Wordle.Api.Services
                 if (WonGame)
                     player.GamesWon++;
 
-                player.WinLossAverage = player.GamesWon / player.GameCount;
+                player.WinLossAverage = (player.GamesWon / player.GameCount)*100;
             }
             else
             {
@@ -64,7 +64,7 @@ namespace Wordle.Api.Services
                         Name = Name,
                         GameCount = 1,
                         GamesWon = 1,
-                        WinLossAverage = 1,
+                        WinLossAverage = 100,
                     };
                 }
                 else
