@@ -7,6 +7,7 @@ import { inject } from 'vue'
 import { SignInService } from '@/scripts/signInService'
 import AboutView from '@/views/AboutView.vue'
 import EasyBot from '@/views/EasyBot.vue'
+import HardBot from '@/views/HardBot.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/TikTacToe',
       name: 'TikTacToe',
       component: TikTacToe
+    },
+    {
+      path: '/Hardbot',
+      name: 'Hardbot',
+      component: HardBot
     },
     {
       path: '/Easybot',

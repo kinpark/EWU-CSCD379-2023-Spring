@@ -1,7 +1,7 @@
 <template>
   <v-row class="justify-center">
     <v-col cols="auto">
-      <h1><Strong>Tic Tac Toe against bot</Strong></h1>
+      <h1><Strong>Tic Tac Toe against <v-icon icon="mdi-baby-face"></v-icon> EASY bot</Strong></h1>
     </v-col>
   </v-row>
 

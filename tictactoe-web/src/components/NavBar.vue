@@ -10,7 +10,7 @@
         <v-btn to="/TikTacToe">TikTacToe</v-btn>
         <v-btn to="/leaderboard">Leader Board</v-btn>
         <v-btn to="/about">About</v-btn>
-        <v-btn to="/Easybot">Play against bot</v-btn>
+        <v-btn to="/Hardbot">Play against bot</v-btn>
       </v-toolbar-items>
       <v-toolbar-items>
         <v-app-bar-nav-icon @click="setTheme('default')" icon="mdi-theme-light-dark">
@@ -27,7 +27,8 @@
           <v-list-item-subtitle>Tic Tac Toe</v-list-item-subtitle>
           <v-list-item prepend-icon="mdi-home" to="/"> Home </v-list-item>
           <v-list-item prepend-icon="mdi-star" to="/TikTacToe"> Tic Tac Toe </v-list-item>
-          <v-list-item prepend-icon="mdi-star" to="/Easybot"> Play Against Bot </v-list-item>
+          <v-list-item prepend-icon="mdi-baby-face" to="/Easybot"> Play Against Easy Bot </v-list-item>
+          <v-list-item prepend-icon="mdi-skull" to="/Hardbot"> Play Against Hard Bot </v-list-item>
           <v-list-item prepend-icon="mdi-star-box" to="/leaderboard"> Leader Board </v-list-item>
           <v-list-item
             prepend-icon="mdi-cog"

@@ -6,8 +6,12 @@
     <v-btn @click="$router.push('/TikTacToe')" color="primary">Tic Tac Toe </v-btn>
     <br />
     <br />
-    <h3>A game a casual game of Tic Tac Toe against an easy bot</h3>
-    <v-btn @click="$router.push('/Easybot')" color="primary">Against Bot</v-btn>
+    <h3><v-icon icon="mdi-skull"></v-icon> A game a casual game of Tic Tac Toe against a hard bot <v-icon icon="mdi-skull"></v-icon></h3>
+    <v-btn @click="$router.push('/Hardbot')" color="primary">Hard Bot</v-btn>
+    <br />
+    <br />
+    <h3><v-icon icon="mdi-baby-face"></v-icon> A game a casual game of Tic Tac Toe against an easy bot <v-icon icon="mdi-baby-face"></v-icon></h3>
+    <v-btn @click="$router.push('/Easybot')" color="primary">Easy Bot</v-btn>
     <br />
     <br />
     <h3>Check out how you stack up against other players</h3>
