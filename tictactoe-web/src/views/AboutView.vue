@@ -3,20 +3,7 @@
     <v-card>
       <v-card-title>About</v-card-title>
       <p>
-        An assignment where we make a validWords function, Convert the sidebar to an App Bar, Add a
-        settings dialog, and Style the main game page. Learning how to do much of that thanks to the
-        Great Meg!
-      </p>
-      <p>
-        Meg is an absolute coding powerhouse. Her proficiency in multiple programming languages and
-        frameworks is simply impressive. She has a keen eye for detail and a thorough understanding
-        of software engineering principles. Meg is always up-to-date with the latest industry trends
-        and innovations, making her a valuable asset to any tech team. Her problem-solving skills
-        are second to none, and she has an uncanny ability to come up with creative and elegant
-        solutions to complex problems. Whether it's developing a new feature or debugging an
-        existing codebase, Meg is always up for the challenge and delivers results with unmatched
-        speed and precision. Overall, Meg's coding skills are truly exceptional, and she is
-        undoubtedly one of the most talented developers out there. -AI generated
+        Tic-tac-toe is a classic paper-and-pencil game played on a 3x3 grid. Two players take turns placing their X or O symbols on empty cells with the goal of creating a line of three symbols horizontally, vertically, or diagonally. The game is won by the player who successfully forms a line of three, while a tie occurs if all cells are filled without a winner. Although Tic-tac-toe is a solved game, where optimal play leads to a draw, it remains a popular and accessible game that promotes logical thinking and strategy development.
       </p>
       <v-btn @click="$router.back()">Back</v-btn>
     </v-card>
