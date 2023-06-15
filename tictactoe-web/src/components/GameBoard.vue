@@ -4,6 +4,7 @@
       <h1>Tik Tac Toe</h1>
     </v-col>
   </v-row>
+  <UserName/>
 
   <v-row class="justify-center" dense v-for="(row, rowIndex) in grid" :key="rowIndex" >
     <v-col cols="auto" dense v-for="(letter, columnIndex) in row" :key="columnIndex">
@@ -18,11 +19,12 @@
 
   <v-row class="justify-center">
     <v-col cols="auto">
-      <v-btn @click="restartGame">Restart game</v-btn>
+      <v-btn @click="restartGame" color="primary">Restart game</v-btn>
     </v-col>
   </v-row>
 
   <div class="text-h4 text-center mt-10" v-if="win">{{ win }}</div>
+  <div class="text-h4 text-center mt-10" v-else-if="movecount === 9 && !win">It's a draw</div>
 
 </template>
 
@@ -30,6 +32,7 @@
 import LetterBase from './LetterBase.vue'
 import { ref } from 'vue'
 import { TikTacToeGame } from '../scripts/TikTacToeGame';
+import UserName from './UserName.vue';
 
 const win = ref<string | null>(null)
 
@@ -48,6 +51,7 @@ const player1Moves = ref<string[]>([])
 const player2Moves = ref<string[]>([])
 let currentPlayer = 'player1'
 const grid = ref([...props.grid])
+const movecount = ref(0)
 
 
 function updateChar(rowIndex: number, columnIndex: number) {
@@ -59,7 +63,7 @@ function updateChar(rowIndex: number, columnIndex: number) {
   if (!props.grid[rowIndex][columnIndex].clicked) {
     grid.value[rowIndex][columnIndex].char = currentPlayer === 'player1' ? 'X' : 'O'
     grid.value[rowIndex][columnIndex].clicked = true
-
+    movecount.value++
     if (currentPlayer === 'player1') {
       player1Moves.value.push(position)
       currentPlayer = 'player2'
@@ -83,6 +87,7 @@ function restartGame() {
   player1Moves.value = []
   player2Moves.value = []
   win.value = null
+  movecount.value = 0
   currentPlayer = 'player1'
   grid.value.forEach(row => {
     row.forEach(letter => {
@@ -104,15 +109,10 @@ function checkForWinner() {
 }
 
 function highlightWinningCombination(winningCombination: string[]): void {
-  grid.value = grid.value.map(row => [...row])
-
   winningCombination.forEach(position => {
     const rowIndex = position.charCodeAt(0) - 97
     const columnIndex = parseInt(position[1]) - 1
-    grid.value[rowIndex][columnIndex] = {
-      ...grid.value[rowIndex][columnIndex],
-      color: 'correct'
-    }
+    grid.value[rowIndex][columnIndex].color = 'correct'
   })
 }
 
