@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Letter } from '@/scripts/letter'
+import type { Letter } from '@/scripts/letter.ts'
 import LetterBase from './LetterBase.vue'
 import { ref, computed } from 'vue'
 

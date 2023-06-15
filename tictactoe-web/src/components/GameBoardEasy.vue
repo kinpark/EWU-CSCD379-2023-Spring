@@ -30,6 +30,7 @@
   </v-row>
 
   <div class="text-h4 text-center mt-10" v-if="win=== 'X player wins!'">Player win!</div>
+  <div class="text-h4 text-center mt-10" v-if="!win && movecount === 9"> It's a draw! </div>
     <div class="text-h4 text-center mt-10" v-if="win=== 'O player wins!'"><v-icon icon="mdi-baby-carriage"></v-icon> Bot win! <v-icon icon="mdi-baby-carriage"></v-icon></div>
 </template>
 
@@ -39,6 +40,7 @@ import { ref } from 'vue'
 import { TikTacToeGame } from '../scripts/TikTacToeGame'
 import UserName from './UserName.vue'
 import Axios from 'axios'
+import clicking_button from '@/assets/clicking_button_sound.mp3'
 
 const win = ref<string | null>(null)
 
@@ -58,6 +60,7 @@ const player2Moves = ref<string[]>([])
 let currentPlayer = 'player1'
 const grid = ref([...props.grid])
 const movecount = ref(0)
+const clicksound = new Audio(clicking_button)
 
 function updateChar(rowIndex: number, columnIndex: number) {
   const position = getPosition(rowIndex, columnIndex)
@@ -65,6 +68,7 @@ function updateChar(rowIndex: number, columnIndex: number) {
     return
   }
   if (currentPlayer === 'player1') {
+    clicksound.play()
     grid.value[rowIndex][columnIndex].char = 'X'
     grid.value[rowIndex][columnIndex].clicked = true
     movecount.value++
@@ -108,6 +112,7 @@ function getPosition(rowIndex: number, columnIndex: number): string {
 }
 
 function restartGame() {
+  clicksound.play()
   player1Moves.value = []
   player2Moves.value = []
   win.value = null
@@ -156,6 +161,17 @@ function postresult() {
     .catch((error) => {
       console.log(error)
     })
+    Axios.post(
+      `Player/AddPlayer?newName=Easybot&WonGame=${
+        win.value === 'O player wins!' ? true : false
+      }`
+    )
+      .then((response): void => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
 }
 </script>
 

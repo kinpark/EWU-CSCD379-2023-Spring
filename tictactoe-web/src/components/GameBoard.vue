@@ -38,6 +38,7 @@ import { ref } from 'vue'
 import { TikTacToeGame } from '../scripts/TikTacToeGame'
 import UserName from './UserName.vue'
 import Axios from 'axios'
+import clicking_button from '@/assets/clicking_button_sound.mp3'
 
 const win = ref<string | null>(null)
 
@@ -57,8 +58,10 @@ const player2Moves = ref<string[]>([])
 let currentPlayer = 'player1'
 const grid = ref([...props.grid])
 const movecount = ref(0)
+const clicksound = new Audio(clicking_button)
 
 function updateChar(rowIndex: number, columnIndex: number) {
+  clicksound.play()
   const position = getPosition(rowIndex, columnIndex)
   if (win.value) {
     return
@@ -89,6 +92,7 @@ function getPosition(rowIndex: number, columnIndex: number): string {
 }
 
 function restartGame() {
+  clicksound.play()
   player1Moves.value = []
   player2Moves.value = []
   win.value = null

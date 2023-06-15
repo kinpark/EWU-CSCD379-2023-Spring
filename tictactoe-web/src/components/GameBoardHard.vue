@@ -4,7 +4,9 @@
         <h1><strong>Tic Tac Toe against <v-icon icon="mdi-skull"></v-icon> HARD bot</strong></h1>     
     </v-col>
     </v-row>
-  
+
+    <img class="shrug" :src="shrug" alt="Sans shrug GIF">
+    <img class="sans" :src="sans" alt="Sans GIF">
     <div>
       <v-row class="justify-center" dense v-for="(row, rowIndex) in grid" :key="rowIndex">
         <v-col cols="auto" dense v-for="(letter, columnIndex) in row" :key="columnIndex">
@@ -17,6 +19,7 @@
         </v-col>
       </v-row>
     </div>
+    
   
     <UserName class="boardfix" />
   
@@ -30,15 +33,21 @@
     </v-row>
   
     <div class="text-h4 text-center mt-10" v-if="win=== 'X player wins!'">Player win!</div>
+    <div class="text-h4 text-center mt-10" v-if="win && movecount == 9">{{ win }}</div>
     <div class="text-h4 text-center mt-10" v-if="win=== 'O player wins!'"><v-icon icon="mdi-emoticon-devil"></v-icon> Bot win! <v-icon icon="mdi-emoticon-devil"></v-icon></div>
+
+    
   </template>
-  
   <script setup lang="ts">
   import LetterBase from './LetterBase.vue'
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, onBeforeUnmount } from 'vue';
   import { TikTacToeGame } from '../scripts/TikTacToeGame'
   import UserName from './UserName.vue'
   import Axios from 'axios'
+    import clicking_button from '@/assets/clicking_button_sound.mp3'
+    import megalovinia from '@/assets/megalovania.mp3'
+    import sans from '@/assets/sans.gif'
+    import shrug from '@/assets/sans-shrug.gif'
   
   const win = ref<string | null>(null)
   
@@ -48,13 +57,20 @@
     clicked: boolean
   }
   
+  
   onMounted(() => {
-    makeComputerMove()
+      makeComputerMove()
+      megaloviniasound.play()
+      megaloviniasound.volume = 0.4
+  })
+  onBeforeUnmount(() => {
+    megaloviniasound.pause()
   })
 
   const props = defineProps<{
     grid: Letter[][]
   }>()
+
   
   const game = new TikTacToeGame()
   const player1Moves = ref<string[]>([])
@@ -62,6 +78,8 @@
   let currentPlayer = 'player1'
   const grid = ref([...props.grid])
   const movecount = ref(0)
+  const clicksound = new Audio(clicking_button)
+    const megaloviniasound = new Audio(megalovinia)
   
   function updateChar(rowIndex: number, columnIndex: number) {
     const position = getPosition(rowIndex, columnIndex)
@@ -69,6 +87,7 @@
       return
     }
     if (currentPlayer === 'player1') {
+        clicksound.play()
       grid.value[rowIndex][columnIndex].char = 'X'
       grid.value[rowIndex][columnIndex].clicked = true
       movecount.value++
@@ -99,6 +118,7 @@
     console.log("HERE THE MOVE KID "+answermove);
     const { rowIndex, columnIndex } = getPositionCoordinates(answermove);
     answermove = 'No move';
+    
     grid.value[rowIndex][columnIndex].char = 'O';
     grid.value[rowIndex][columnIndex].clicked = true;
     movecount.value++;
@@ -232,6 +252,7 @@
   }
   
   function restartGame() {
+    clicksound.play()
     player1Moves.value = []
     player2Moves.value = []
     win.value = null
@@ -281,12 +302,34 @@
       .catch((error) => {
         console.log(error)
       })
+      Axios.post(
+      `Player/AddPlayer?newName=Hardbot&WonGame=${
+        win.value === 'O player wins!' ? true : false
+      }`
+    )
+      .then((response): void => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
   </script>
-  
-  <style scoped>
-  .boardfix {
-    position: fixed;
-  }
-  </style>
+     <style scoped>
+     .shrug {
+       position: absolute;
+       width: 200px;
+       height: 200px;
+       left: 80%;
+     }
+     .sans {
+       position: absolute;
+       right: 80%;
+     }
+ 
+ 
+    .boardfix {
+      position: fixed;
+    }
+    </style>
   
