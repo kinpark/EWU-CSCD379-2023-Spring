@@ -2,7 +2,7 @@
   <nav>
     <v-toolbar color="primary" flat app>
       <v-toolbar-title @click="$router.push('/')"
-        ><v-icon>mdi-diamond-stone</v-icon> Wordle Redux</v-toolbar-title
+        ><v-icon>mdi-diamond-stone</v-icon> Tic Tac Toe</v-toolbar-title
       >
       <v-spacer></v-spacer>
       <v-toolbar-items v-if="display.mdAndUp">
@@ -10,7 +10,7 @@
         <v-btn to="/TikTacToe">TikTacToe</v-btn>
         <v-btn to="/leaderboard">Leader Board</v-btn>
         <v-btn to="/about">About</v-btn>
-        <v-btn to="/worldoftheday">Wordle of the Day</v-btn>
+        <v-btn to="/Easybot">Play against bot</v-btn>
       </v-toolbar-items>
       <v-toolbar-items>
         <v-app-bar-nav-icon @click="setTheme('default')" icon="mdi-theme-light-dark"> </v-app-bar-nav-icon>
@@ -22,25 +22,19 @@
     <v-navigation-drawer location="right" @click.stop="drawer = !drawer" v-model="drawer" temporary>
       <v-list-item >
         <v-list-item-content>
-          <v-list-item-title class="title">Wordle Redux</v-list-item-title>
-          <v-list-item-subtitle>Wordle Redux</v-list-item-subtitle>
+          <v-list-item-title class="title">Tic Tac Toe</v-list-item-title>
+          <v-list-item-subtitle>Tic Tac Toe</v-list-item-subtitle>
           <v-list-item prepend-icon="mdi-home" to="/">
             Home
           </v-list-item>
-          <v-list-item prepend-icon="mdi-star" to="/wordle">
-            Wordle
+          <v-list-item prepend-icon="mdi-star" to="/TikTacToe">
+            Tic Tac Toe
           </v-list-item>
-          <v-list-item prepend-icon="mdi-calendar-today" to="/worldoftheday" >
-            Wordle Of the Day
+          <v-list-item prepend-icon="mdi-star" to="/Easybot">
+            Play Against Bot
           </v-list-item>
           <v-list-item prepend-icon="mdi-star-box" to="/leaderboard">
             Leader Board
-          </v-list-item>
-          <v-list-item prepend-icon="mdi-table-clock" to="/lasttenwords">
-            Last 10 Wordle of the day
-          </v-list-item>
-          <v-list-item prepend-icon="mdi-playlist-edit" to="/wordeditor">
-            Word Editor
           </v-list-item>
           <v-list-item prepend-icon="mdi-cog" @click.stop="setting = true" @click="drawer = !drawer">
             Setting

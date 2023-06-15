@@ -2,11 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import TikTacToe from '../views/TikTacToe.vue'
 import LeaderboardView from '../views/LeaderboardView.vue'
-import LastTenWords from '@/views/LastTenWords.vue'
 import { Services } from '@/scripts/services'
 import { inject } from 'vue'
 import { SignInService } from '@/scripts/signInService'
-import WordEditor from '@/views/WordEditor.vue'
+import AboutView from '@/views/AboutView.vue'
+import EasyBot from '@/views/EasyBot.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,40 +22,21 @@ const router = createRouter({
       component: TikTacToe
     },
     {
+      path: '/Easybot',
+      name: 'Easybot',
+      component: EasyBot
+    },
+    {
       path: '/leaderboard',
       name: 'leaderboard',
       component: LeaderboardView
-    }
-    ,
-    {
-      path: '/lasttenwords',
-      name: 'lastTenWords',
-      component: LastTenWords
     },
-    {
-      path: '/wordeditor',
-      name: 'wordEditor',
-      component: WordEditor,
-    }
-    ,
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-      beforeEnter: (to, from, next) => {
-        //return SignInService.instance._isSignedIn
-        if (SignInService.instance.isSignedIn) next()
-        else next({ name: 'wordle' })
-      }
+      component: AboutView
     },
-    {
-      path: '/leaderboard',
-      name: 'leaderboard',
-      component: () => import('../views/LeaderboardView.vue')
-    }
+    
   ]
 })
 

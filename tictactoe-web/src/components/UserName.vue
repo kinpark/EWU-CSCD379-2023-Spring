@@ -63,32 +63,23 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
-
-
 const user1 = ref(false)
 const user2 = ref(false)
 const player1 = ref("Player 1")
 const player2 = ref("Player 2")
 
-if (localStorage.getItem('player1') === null){
-  localStorage.setItem('player1', player1.value)
-} else {
-  user1.value = false
-}
-
-if (localStorage.getItem('player2') === null){
-  localStorage.setItem('player2', player2.value)
-} else {
-  user2.value = false
-}
-
-
 onMounted(() => {
     if (localStorage.getItem('player1') != null) {
         player1.value = localStorage.getItem('player1')!
     }
+    else if(localStorage.getItem('player1') === null) {
+        localStorage.setItem('player1', 'Player 1')
+    }
     if (localStorage.getItem('player2') != null) {
         player2.value = localStorage.getItem('player2')!
+    }
+    else if(localStorage.getItem('player2') === null) {
+        localStorage.setItem('player2', 'Player 2')
     }
 })
 
@@ -99,7 +90,7 @@ function setplayer1() {
 
 function setplayer2() {
   user2.value = false
-  localStorage.setItem('player2', player2.value)
+  localStorage.setItem('player2', player2.value)    
 }
 
 

@@ -7,8 +7,8 @@
       </div>
       <template v-for="player in playerData" v-bind:key="player.name">
         <v-progress-linear 
-          :model-value="getScore(player.averageAttempts)"
-          max="5"
+          :model-value="player.winLossAverage"
+          max="100"
           color="#757575"
           height="25"
           striped
@@ -16,7 +16,7 @@
         <strong>{{ player.name }}</strong>
         </v-progress-linear>
         <div class="text-center">
-          Game Count: {{ player.gameCount }}, Average Attempts: {{ player.averageAttempts }}, Average Time To Win: {{ player.averageSecondsPerGame }} </div>
+          Game Count: {{ player.gameCount }}, Game Won: {{ player.gamesWon }}, Average Win/Loss: {{ player.winLossAverage.toFixed(2) }} </div>
       </template>
       <div class="text-center">
       <v-btn @click="$router.back()" color="primary">Back</v-btn>
@@ -47,14 +47,8 @@ const overlay = ref(true)
 interface PlayerData {
   name: string
   gameCount: number
-  averageAttempts: number
-  averageSecondsPerGame: number
-  TotalSecondsPlayed: number
-  TotalAttempts: number
-}
-
-function getScore(i: number) {
-    return (6  - i)
+  gamesWon: number
+  winLossAverage  : number
 }
 
 Axios.get('Player/GetTopTen')
@@ -66,9 +60,6 @@ Axios.get('Player/GetTopTen')
   .catch((error) => {
     console.log(error)
   })
-
-
-
 
 
 </script>

@@ -1,14 +1,14 @@
 <template>
   <v-row class="justify-center">
     <v-col cols="auto">
-      <h1>Tik Tac Toe</h1>
+      <h1><Strong>Tic Tac Toe</Strong></h1>
     </v-col>
   </v-row>
-  <UserName/>
 
+<div>
   <v-row class="justify-center" dense v-for="(row, rowIndex) in grid" :key="rowIndex" >
     <v-col cols="auto" dense v-for="(letter, columnIndex) in row" :key="columnIndex">
-      <LetterBase
+      <LetterBase 
         :char="letter.char"
         :color="letter.color"
         @click="updateChar(rowIndex, columnIndex)"
@@ -16,6 +16,12 @@
       ></LetterBase>
     </v-col>
   </v-row>
+</div>
+  
+<UserName class="boardfix" />
+
+<br/>
+<br/>
 
   <v-row class="justify-center">
     <v-col cols="auto">
@@ -24,15 +30,15 @@
   </v-row>
 
   <div class="text-h4 text-center mt-10" v-if="win">{{ win }}</div>
-  <div class="text-h4 text-center mt-10" v-else-if="movecount === 9 && !win">It's a draw</div>
 
 </template>
 
 <script setup lang="ts">
 import LetterBase from './LetterBase.vue'
 import { ref } from 'vue'
-import { TikTacToeGame } from '../scripts/TikTacToeGame';
-import UserName from './UserName.vue';
+import { TikTacToeGame } from '../scripts/TikTacToeGame'
+import UserName from './UserName.vue'
+import Axios from 'axios'
 
 const win = ref<string | null>(null)
 
@@ -64,6 +70,7 @@ function updateChar(rowIndex: number, columnIndex: number) {
     grid.value[rowIndex][columnIndex].char = currentPlayer === 'player1' ? 'X' : 'O'
     grid.value[rowIndex][columnIndex].clicked = true
     movecount.value++
+
     if (currentPlayer === 'player1') {
       player1Moves.value.push(position)
       currentPlayer = 'player2'
@@ -105,6 +112,10 @@ function checkForWinner() {
     console.log(winner)
     const winningCombination = game.winComb(player1Moves.value, player2Moves.value)
     highlightWinningCombination(winningCombination as string[])
+    postresult()
+  } else if (movecount.value === 9) {
+    win.value = 'It\'s a draw'
+    postresult()
   }
 }
 
@@ -116,5 +127,27 @@ function highlightWinningCombination(winningCombination: string[]): void {
   })
 }
 
+function postresult() {
+  Axios.post(`Player/AddPlayer?newName=${localStorage.getItem('player1')}&WonGame=${win.value === 'X player wins!' ? true : false}`)
+    .then((response): void => {
+          console.log(response.data)
+      }) 
+          .catch((error) => {
+          console.log(error)
+      })
+      Axios.post(`Player/AddPlayer?newName=${localStorage.getItem('player2')}&WonGame=${win.value === 'O player wins!' ? true : false}`)
+    .then((response): void => {
+          console.log(response.data)
+      }) 
+          .catch((error) => {
+          console.log(error)
+      })
+}
 
 </script>
+
+<style scoped>
+.boardfix {
+  position: fixed;
+}
+</style>
