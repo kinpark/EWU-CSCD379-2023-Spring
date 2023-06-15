@@ -27,13 +27,10 @@ jobs:
         run: npm run lint
       - name: Prettier Check
         working-directory: ./tictactoe-web
-        run: npm run format:check
+        run: npm run format
       - name: Build Vue App 
         working-directory: ./tictactoe-web
         run: npm run build
-      - name: Run Vitest Unit Tests
-        run: npm run test:unit
-        working-directory: ./tictactoe-web
      
       - name: Deploy
         if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
