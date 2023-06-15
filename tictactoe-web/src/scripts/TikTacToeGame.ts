@@ -11,6 +11,7 @@ export class TikTacToeGame {
   ]
 
   static readonly #possibewinmove = [
+    /*
     ['a1', 'a2'], //0
     ['b1', 'b2'], //1
     ['c1', 'c2'], //2
@@ -23,13 +24,22 @@ export class TikTacToeGame {
     ['b1', 'c1'], //9
     ['b2', 'c2'], //10
     ['b3', 'c3'], //11
+    */
     ['a1', 'b2'], //12
     ['a3', 'b2'], //13
     ['c1', 'b2'], //14
-    ['c3', 'b2'] //15
+    ['c3', 'b2'], //15
+    /*
+    ['c1', 'c2', 'b2'], //16
+    ['a3', 'b3', 'b2'], //17
+    ['a1', 'a2', 'b2'], //18
+    ['c3', 'c2', 'b2'], //19
+    */
+    ['a3', 'b1', 'c3'], //20
   ]
 
   static readonly #answermove = [
+    /*
     ['a3'], //0
     ['b3'], //1
     ['c3'], //2
@@ -42,19 +52,26 @@ export class TikTacToeGame {
     ['a1'], //9
     ['a2'], //10
     ['a3'], //11
+    */
     ['c3'], //12
     ['c1'], //13
     ['a3'], //14
-    ['a1'] //15
+    ['a1'], //15
+    /*
+    ['c3'], //16
+    ['c1'], //17
+    ['c3'], //18
+    ['a1'], //19
+    */
+    ['b3'], //20
   ]
 
-  getAnswerMove(player1Moves: string[], player2Moves: string[]): string {
-    const allMoves = player1Moves.concat(player2Moves);
-  
+  getAnswerMove(player1Moves: string[], player2Moves: string[]): string {  
     for (let i = 0; i < TikTacToeGame.#possibewinmove.length; i++) {
-      const [move1, move2] = TikTacToeGame.#possibewinmove[i];
+      const [move] = TikTacToeGame.#possibewinmove[i];
+      const answerMove = TikTacToeGame.#answermove[i][0];
   
-      if (player1Moves.includes(move1) && !player2Moves.includes(TikTacToeGame.#answermove[i][0])) {
+      if (player1Moves.includes(move) && !player2Moves.includes(answerMove) && !player1Moves.includes(answerMove)) {
         return TikTacToeGame.#answermove[i][0];
       }
     }

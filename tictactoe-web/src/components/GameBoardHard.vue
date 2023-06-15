@@ -29,12 +29,13 @@
       </v-col>
     </v-row>
   
-    <div class="text-h4 text-center mt-10" v-if="win">{{ win }}</div>
+    <div class="text-h4 text-center mt-10" v-if="win=== 'X player wins!'">Player win!</div>
+    <div class="text-h4 text-center mt-10" v-if="win=== 'O player wins!'"><v-icon icon="mdi-emoticon-devil"></v-icon> Bot win! <v-icon icon="mdi-emoticon-devil"></v-icon></div>
   </template>
   
   <script setup lang="ts">
   import LetterBase from './LetterBase.vue'
-  import { ref } from 'vue'
+  import { ref, onMounted } from 'vue';
   import { TikTacToeGame } from '../scripts/TikTacToeGame'
   import UserName from './UserName.vue'
   import Axios from 'axios'
@@ -47,6 +48,10 @@
     clicked: boolean
   }
   
+  onMounted(() => {
+    makeComputerMove()
+  })
+
   const props = defineProps<{
     grid: Letter[][]
   }>()
@@ -76,22 +81,47 @@
     }
   }
   
+  function getPositionCoordinates(position: string): { rowIndex: number; columnIndex: number } {
+  const letters = ['a', 'b', 'c'];
+  const numbers = ['1', '2', '3'];
+  const rowIndex = letters.indexOf(position[0]);
+  const columnIndex = numbers.indexOf(position[1]);
+  return { rowIndex, columnIndex };
+}
+
   function makeComputerMove() {
-    if (win.value || movecount.value === 9) {
-      return;
-    }
+  if (win.value || movecount.value === 9) {
+    return;
+  }
+  let answermove = game.getAnswerMove(player1Moves.value, player2Moves.value);
   
-    const bestMove = getBestMove(grid.value, player1Moves.value, player2Moves.value, currentPlayer);
-    const { rowIndex, columnIndex } = bestMove;
-  
+  if (answermove != 'No move') {
+    console.log("HERE THE MOVE KID "+answermove);
+    const { rowIndex, columnIndex } = getPositionCoordinates(answermove);
+    answermove = 'No move';
     grid.value[rowIndex][columnIndex].char = 'O';
     grid.value[rowIndex][columnIndex].clicked = true;
     movecount.value++;
     player2Moves.value.push(getPosition(rowIndex, columnIndex));
     currentPlayer = 'player1';
-  
+
     checkForWinner();
+  } else {
+  
+
+
+  const bestMove = getBestMove(grid.value, player1Moves.value, player2Moves.value, currentPlayer);
+  const { rowIndex, columnIndex } = bestMove;
+
+  grid.value[rowIndex][columnIndex].char = 'O';
+  grid.value[rowIndex][columnIndex].clicked = true;
+  movecount.value++;
+  player2Moves.value.push(getPosition(rowIndex, columnIndex));
+  currentPlayer = 'player1';
+
+  checkForWinner();
   }
+}
   
   function getAvailableMoves(currentGrid: Letter[][]): { rowIndex: number; columnIndex: number }[] {
     const availableMoves: { rowIndex: number; columnIndex: number }[] = [];
@@ -108,31 +138,33 @@
   }
   
   function getBestMove(currentGrid: Letter[][], player1Moves: string[], player2Moves: string[], currentPlayer: string): { rowIndex: number; columnIndex: number } {
-    const availableMoves: { rowIndex: number; columnIndex: number }[] = getAvailableMoves(currentGrid);
-    let bestScore = -Infinity;
-    let bestMove: { rowIndex: number; columnIndex: number } | undefined = undefined;
-  
-    for (const move of availableMoves) {
-      const { rowIndex, columnIndex } = move;
-      const newGrid: Letter[][] = JSON.parse(JSON.stringify(currentGrid));
-      newGrid[rowIndex][columnIndex].char = 'O';
-      newGrid[rowIndex][columnIndex].clicked = true;
-      const newPlayer2Moves = [...player2Moves, getPosition(rowIndex, columnIndex)];
-      currentPlayer = 'player1';
-  
-      const score = minimax(newGrid, player1Moves, newPlayer2Moves, currentPlayer, true, -Infinity, Infinity);
-      if (score > bestScore) {
-        bestScore = score;
-        bestMove = move;
-      }
+  const availableMoves: { rowIndex: number; columnIndex: number }[] = getAvailableMoves(currentGrid);
+  let bestScore = -Infinity;
+  let bestMove: { rowIndex: number; columnIndex: number } | undefined = undefined;
+
+  for (const move of availableMoves) {
+    const { rowIndex, columnIndex } = move;
+    const newGrid: Letter[][] = JSON.parse(JSON.stringify(currentGrid));
+    newGrid[rowIndex][columnIndex].char = 'O';
+    newGrid[rowIndex][columnIndex].clicked = true;
+    const newPlayer2Moves = [...player2Moves, getPosition(rowIndex, columnIndex)];
+    currentPlayer = 'player1';
+
+    const score = minimax(newGrid, player1Moves, newPlayer2Moves, currentPlayer, true, -Infinity, Infinity);
+    if (score > bestScore) {
+      bestScore = score;
+      bestMove = move;
     }
-  
-    if (!bestMove) {
-      throw new Error('No best move found.');
-    }
-  
-    return bestMove;
   }
+
+  if (!bestMove) {
+    bestMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+  }
+
+
+  return bestMove;
+}
+
   
   function minimax(currentGrid: Letter[][], player1Moves: string[], player2Moves: string[], currentPlayer: string, isMaximizingPlayer: boolean, alpha: number, beta: number): number {
     const winner = game.checkForWinner(player1Moves, player2Moves);
@@ -196,7 +228,6 @@
   function getPosition(rowIndex: number, columnIndex: number): string {
     const letters = ['a', 'b', 'c']
     const numbers = ['1', '2', '3']
-    console.log(`${letters[rowIndex]}${numbers[columnIndex]}`)
     return `${letters[rowIndex]}${numbers[columnIndex]}`
   }
   
@@ -213,6 +244,7 @@
         letter.clicked = false
       })
     })
+    makeComputerMove()
   }
   
   function checkForWinner() {

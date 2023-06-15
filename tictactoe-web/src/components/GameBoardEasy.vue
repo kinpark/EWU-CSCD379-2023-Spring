@@ -29,7 +29,8 @@
     </v-col>
   </v-row>
 
-  <div class="text-h4 text-center mt-10" v-if="win">{{ win }}</div>
+  <div class="text-h4 text-center mt-10" v-if="win=== 'X player wins!'">Player win!</div>
+    <div class="text-h4 text-center mt-10" v-if="win=== 'O player wins!'"><v-icon icon="mdi-baby-carriage"></v-icon> Bot win! <v-icon icon="mdi-baby-carriage"></v-icon></div>
 </template>
 
 <script setup lang="ts">
